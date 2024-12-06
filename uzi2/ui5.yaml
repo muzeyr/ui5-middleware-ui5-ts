@@ -1,0 +1,43 @@
+specVersion: "4.0"
+metadata:
+  name: uzi2
+type: application
+framework:
+  name: SAPUI5
+  version: "1.130.2"
+  libraries:
+    - name: sap.m
+    - name: sap.ui.core
+    - name: themelib_sap_horizon
+builder:
+  resources:
+    excludes:
+      - "test/e2e/**"
+  customTasks:
+    - name: ui5-tooling-transpile-task
+      afterTask: replaceVersion
+server:
+  customMiddleware:
+    - name: ui5-tooling-transpile-middleware
+      afterMiddleware: compression
+    - name: ui5-middleware-livereload
+      afterMiddleware: compression
+    - name: ui5-middleware-servestatic
+      afterMiddleware: compression
+      mountPath: /uzi
+      configuration:
+        rootPath: "/home/user/projects/uzi/webapp"
+    - name: ui5-middleware-ui5
+      afterMiddleware: compression
+      configuration:
+        modules:
+          uzi:
+            mountPath: "/uzi"
+
+#    - name: ui5-middleware-servestatic
+#      afterMiddleware: compression
+#      configuration:
+#        paths:
+#          - path: /uzi
+#            directoryPath: "../uzi/webapp"
+
